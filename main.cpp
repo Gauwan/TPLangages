@@ -39,7 +39,7 @@ void cutTransition(string message,int ligne)
     transition.push_back(tmp);
 }
 
-void cutTerminaux(string message)
+int cutInitTerm(string message,bool init)
 {
     string mot="";
     string space=" ";
@@ -50,7 +50,10 @@ void cutTerminaux(string message)
     {
         mot=message.substr(i,j-i);
         conv=stoi(mot); ///Conversion
-        terminaux.push_back(conv);
+        if(init==true)
+            initiaux.push_back(conv);
+        else
+            terminaux.push_back(conv);
 
         i=j+1;
         j = message.find(space,i);
@@ -59,35 +62,26 @@ void cutTerminaux(string message)
 
     mot=message.substr(i);
     conv=stoi(mot); ///Conversion
-    terminaux.push_back(conv);
+    if(init==true)
+        initiaux.push_back(conv);
+    else
+        terminaux.push_back(conv);
+    return cpt+1;
 }
 
-void cutInitiaux(string message)
+void enleverEpsilon()
 {
-    string mot="";
-    string space=" ";
-    int i=0,j,conv,cpt=0;
 
-    j = message.find(space);
-    while( j != string::npos )
-    {
-        mot=message.substr(i,j-i);
-        conv=stoi(mot); ///Conversion
-        initiaux.push_back(conv);
+}
 
-        i=j+1;
-        j = message.find(space,i);
-        cpt++;
-    }
+void traitement()
+{
 
-    mot=message.substr(i);
-    conv=stoi(mot); ///Conversion
-    initiaux.push_back(conv);
 }
 
 int main()
 {
-    int nbEtat;
+    int nbEtat, nbEtatInit, nbEtatTerm;
 
     ifstream fichier("af.txt", ios::in);  // on ouvre en lecture
 
@@ -102,18 +96,18 @@ int main()
         ///----- Etats initiaux -----///
         getline(fichier, ligne);
         cout << "initiaux: " <<ligne<<endl;
-        cutInitiaux(ligne);
+        nbEtatInit=cutInitTerm(ligne,true);
 
         ///----- Etats terminaux -----///
         getline(fichier, ligne);
         cout << "terminaux: " <<ligne<<endl;
-        cutTerminaux(ligne);
+        nbEtatTerm=cutInitTerm(ligne,false);
 
         ///----- Transitions -----///
         while(getline(fichier, ligne))  // tant que l'on peut mettre la ligne dans "contenu"
         {
             cout << "t: "<< ligne << endl;  // on l'affiche
-           // cout << transition.back(tmp[0]);
+           //cout << transition.back(tmp[0]);
 
         }
         fichier.close();
