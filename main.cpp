@@ -4,6 +4,9 @@
 #include <vector>
 #include <set>
 
+//ligne que j'ai modifiée
+//deusieme essai
+
 using namespace std;
 
 vector<int>initiaux;
@@ -12,6 +15,7 @@ vector<int>terminaux;
 vector<vector<int>> transition;
 vector<int> tmp;
 
+vector<int> divinixVector;
 
 void cutTransition(string message,int ligne)
 {
