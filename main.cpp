@@ -73,14 +73,31 @@ int cutInitTerm(string message,bool init)
     return cpt+1;
 }
 
-void enleverEpsilon()
+void enleverEpsilon() //Suppression des transition epsilon
 {
+    /*int Initi;
+    int Trans;
+    int Termi;
 
+    for(auto t:transition)
+    {
+        if(Trans==2) // 2:Epsilon
+        {
+            for(auto tm:tmp)//Tant qu'il y a des etat qui arrive sur la transition
+            {
+            ///    t.push_back();  //On ajoute une transition
+            }
+        ///    t.pop_back();   //On enleve la transition epsilon
+        }
+    }*/
 }
 
-void traitement()
-{
-
+void traitement() //On cherche les nouveaux états
+{/*
+    int test;
+    for(auto i:initiaux)
+        test=initiaux[0];
+*/
 }
 
 int main()

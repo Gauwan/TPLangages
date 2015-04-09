@@ -1,0 +1,8 @@
+# depslib dependency file v1.0
+1428583775 source:/mnt/info-nfs/users/gabomnes/S2/Projet/TPLangages/main.cpp
+	<iostream>
+	<string>
+	<fstream>
+	<vector>
+	<set>
+
