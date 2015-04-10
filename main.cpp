@@ -12,10 +12,9 @@ using namespace std;
 vector<int>initiaux;
 vector<int>terminaux;
 
-vector<vector<int>> transition;
-vector<int> tmp;
-
-vector<int> divinixVector;
+vector<vector<set<int>>> transition;
+vector<set<int>> tmp;
+vector<int> tmp2;
 
 void cutTransition(string message,int ligne)
 {
@@ -29,7 +28,7 @@ void cutTransition(string message,int ligne)
 
         mot=message.substr(i,j-i);
         conv=stoi(mot); ///Conversion
-        tmp.push_back(conv);
+        tmp2.push_back(conv);
 
 
         i=j+1;
@@ -39,7 +38,7 @@ void cutTransition(string message,int ligne)
 
     mot=message.substr(i);
     conv=stoi(mot); ///Conversion
-    tmp.push_back(conv);
+    tmp2.push_back(conv);
     transition.push_back(tmp);
 }
 
