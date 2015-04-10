@@ -9,40 +9,42 @@
 
 using namespace std;
 
-vector<int>initiaux;
-vector<int>terminaux;
 
-vector<vector<set<int>>> transition;
-vector<set<int>> tmp;
-vector<int> tmp2;
-
-void cutTransition(string message,int ligne)
+void cutTransition(string message,vector<vector<set<int>>> &transition)
 {
+
+
+
     string mot="";
     string space=" ";
+    vector<int> values;
+
     int i=0,j,conv,cpt=0;
 
     j = message.find(space);
     while( j != string::npos )
     {
-
         mot=message.substr(i,j-i);
-        conv=stoi(mot); ///Conversion
-        tmp2.push_back(conv);
-
+        conv=stoi(mot);     //Conversion
+        values.push_back(conv);
 
         i=j+1;
         j = message.find(space,i);
-        cpt++;
     }
 
     mot=message.substr(i);
     conv=stoi(mot); ///Conversion
-    tmp2.push_back(conv);
-    transition.push_back(tmp);
+    values.push_back(conv);
+
+
+    int etatDepart = values[0];
+    int lettre = values[1];
+    int etatArrivee = values[2];
+    transition[etatDepart][lettre].insert(etatArrivee);
+
 }
 
-int cutInitTerm(string message,bool init)
+int cutInitTerm(string message,bool init,vector<int> &initiaux,vector<int> &terminaux)
 {
     string mot="";
     string space=" ";
@@ -92,15 +94,20 @@ void enleverEpsilon() //Suppression des transition epsilon
 }
 
 void traitement() //On cherche les nouveaux états
-{/*
-    int test;
-    for(auto i:initiaux)
-        test=initiaux[0];
-*/
+{
+    /*
+       int test;
+       for(auto i:initiaux)
+           test=initiaux[0];
+    */
 }
 
 int main()
 {
+    vector<int>initiaux;
+    vector<int>terminaux;
+
+    vector<vector<set<int>>> transition;
     int nbEtat, nbEtatInit, nbEtatTerm;
 
     ifstream fichier("af.txt", ios::in);  // on ouvre en lecture
@@ -112,23 +119,25 @@ int main()
         getline(fichier, ligne);
         cout << "nb etat: " <<ligne<<endl;
         nbEtat=stoi(ligne);
+        transition.resize(nbEtat);
+        for(int i=0; i<transition.size();i++)
+            transition[i].resize(3);
 
         ///----- Etats initiaux -----///
         getline(fichier, ligne);
         cout << "initiaux: " <<ligne<<endl;
-        nbEtatInit=cutInitTerm(ligne,true);
+        nbEtatInit=cutInitTerm(ligne,true,initiaux,terminaux);
 
         ///----- Etats terminaux -----///
         getline(fichier, ligne);
         cout << "terminaux: " <<ligne<<endl;
-        nbEtatTerm=cutInitTerm(ligne,false);
+        nbEtatTerm=cutInitTerm(ligne,false,initiaux,terminaux);
 
         ///----- Transitions -----///
         while(getline(fichier, ligne))  // tant que l'on peut mettre la ligne dans "contenu"
         {
             cout << "t: "<< ligne << endl;  // on l'affiche
-           //cout << transition.back(tmp[0]);
-
+            cutTransition(ligne,transition);
         }
         fichier.close();
     }
@@ -137,3 +146,4 @@ int main()
 
     return 0;
 }
+
