@@ -87,7 +87,7 @@ void enleverEpsilon(vector<vector<set<int>>> &transition,int n,vector<int> &init
             for (int x=0; x<n; x++)
                 for(int y=0; y<3; y++)
                     for (auto tr:transition[x][y])
-                        if (tr=it && tr==i)
+                        if (tr==i)
                             transition[x][y].insert(it);
 
             transition[i][2].erase(it); //A la fin, on supprime epsilon
@@ -95,7 +95,7 @@ void enleverEpsilon(vector<vector<set<int>>> &transition,int n,vector<int> &init
     }
 }
 
-void determinisation(vector<int> &initiaux,vector<int> terminaux,vector<vector<set<int>>> transition,vector<set<int>> &etats,vector<vector<int>> &transitionAFD)
+void determinisation(vector<int> &initiaux,vector<int> &terminaux,vector<vector<set<int>>> transition,vector<set<int>> &etats,vector<vector<int>> &transitionAFD)
 {
     set<int> local;
     etats.resize(1);//on ajoute la place pour l'etat initial
@@ -121,10 +121,10 @@ void determinisation(vector<int> &initiaux,vector<int> terminaux,vector<vector<s
             //on cherche si l'ensemble trouvé n'est pas déja un état
             int j=0;
             bool trouve=false;
-            while(j<=etats.size() && !false)
+            while(j<=etats.size() && trouve==false)
             {
                 if(etats[j]==local)
-                    trouve==true;
+                    trouve=true;
                 j++;
             }
             if(!trouve)
@@ -134,16 +134,22 @@ void determinisation(vector<int> &initiaux,vector<int> terminaux,vector<vector<s
 
         //On regarde si on a fini
         cpt++;
-        if(cpt<=etats.size())
+        cout << to_string(cpt) << " : " << to_string(etats.size()) << endl;
+        if(cpt>=etats.size())
             fini=true;
     }
 
     //On recherche les états terminaux
+    vector<int> tmp;
+    for(auto i:terminaux)
+        tmp.push_back(i);
+    terminaux.clear();
+
     for(int x=0; x<etats.size(); x++)
         for(auto e:etats[x])
-            for(auto t:terminaux)
+            for(auto t:tmp)
                 if (e==t)
-                    terminaux.push_back(e);
+                    terminaux.push_back(x);
 
 }
 
@@ -198,7 +204,7 @@ string affichageAFD(int nbEtat,vector<int> initiaux,vector<int> terminaux,vector
     //Affichage des transitions
     for (int i=0; i<nbEtat; i++)
         for (int j=0; j<3; j++)
-            str += to_string(i) + " " + to_string(j) + /*" " + to_string(transitionAFD[i][j]) + */"\n";
+            str += to_string(i) + " " + to_string(j) + " " + /*to_string(transitionAFD[i][j]) + */"\n";
 
 
     return str;
