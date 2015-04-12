@@ -1,3 +1,4 @@
+
 #include <iostream>
 #include <string>
 #include <fstream>
@@ -121,12 +122,28 @@ string affichage(int nbEtat,vector<int> initiaux,vector<int> terminaux,vector<ve
     return str;
 }
 
+
+void determinisation(vector<int> initiaux,vector<int> terminaux,vector<vector<set<int>>> transition,vector<set<int>> etats)
+{
+
+
+
+    etats[0] = transition[initiaux[0]][0] + transition[initiaux[0]][1];
+
+
+
+}
+
+
 int main()
 {
     vector<int>initiaux;
     vector<int>terminaux;
 
     vector<vector<set<int>>> transition;
+
+    vector<set<int>> etats;
+
     int nbEtat, nbEtatInit, nbEtatTerm;
 
     ifstream fichier("af.txt", ios::in);  // on ouvre en lecture
