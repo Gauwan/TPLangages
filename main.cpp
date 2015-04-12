@@ -99,7 +99,7 @@ void determinisation(vector<int> &initiaux,vector<int> &terminaux,vector<vector<
 {
     set<int> local;
     etats.resize(1);//on ajoute la place pour l'etat initial
-    int cpt=0;
+    int cpt=0,cpt2=0;
     bool fini=false;
 
     for(auto i:initiaux)
@@ -109,6 +109,8 @@ void determinisation(vector<int> &initiaux,vector<int> &terminaux,vector<vector<
     initiaux.clear();
     initiaux.push_back(0);
 
+    vector<int> tmp2;
+    tmp2.resize(2);
     while(!fini)
     {
         for(int i=0; i<2; i++) //Change les transition 0 et 1
@@ -128,11 +130,19 @@ void determinisation(vector<int> &initiaux,vector<int> &terminaux,vector<vector<
                 j++;
             }
             if(!trouve)
+            {
                 etats.push_back(local);
+                tmp2[i]=etats.size();
+
+            }
+            else
+                tmp2[i]=j-1;
             local.clear();//on vide l'ensemble local à la fin
+            transitionAFD.push_back(tmp2);
         }
 
         //On regarde si on a fini
+
         cpt++;
         cout << to_string(cpt) << " : " << to_string(etats.size()) << endl;
         if(cpt>=etats.size())
@@ -178,10 +188,10 @@ string affichage(int nbEtat,vector<int> initiaux,vector<int> terminaux,vector<ve
     return str;
 }
 
-string affichageAFD(int nbEtat,vector<int> initiaux,vector<int> terminaux,vector<vector<int>> transitionAFD,vector<set<int>> etats)
+string affichageAFD(vector<int> initiaux,vector<int> terminaux,vector<vector<int>> transitionAFD,vector<set<int>> etats)
 {
     string str;
-    str += "nb etat: " + to_string(nbEtat) + "\n";
+    str += "nb etat: " + to_string(etats.size()) + "\n";
     //Afichage des états initiaux
     str += "Initiaux: ";
     for(auto i:initiaux)
@@ -202,9 +212,9 @@ string affichageAFD(int nbEtat,vector<int> initiaux,vector<int> terminaux,vector
     }
 
     //Affichage des transitions
-    for (int i=0; i<nbEtat; i++)
-        for (int j=0; j<3; j++)
-            str += to_string(i) + " " + to_string(j) + " " + /*to_string(transitionAFD[i][j]) + */"\n";
+    for (int i=0; i<etats.size(); i++)
+        for (int j=0; j<2; j++)
+            str += to_string(i) + " " + to_string(j) + " " + to_string(transitionAFD[i][j]) + "\n";
 
 
     return str;
@@ -264,7 +274,7 @@ int main()
     message += "\n";
     determinisation(initiaux,terminaux,transition,etats,transitionAFD);
     message += "----- Automate AFD -----\n";
-    message += affichageAFD(nbEtat,initiaux,terminaux,transitionAFD,etats);
+    message += affichageAFD(initiaux,terminaux,transitionAFD,etats);
     cout << message << endl;
 
 }
