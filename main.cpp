@@ -96,6 +96,41 @@ void enleverEpsilon(vector<vector<set<int>>> &transition,int n,vector<int> &init
     }
 }
 
+void determinisation(vector<int> &initiaux,vector<int> terminaux,vector<vector<set<int>>> transition,vector<set<int>> &etats)
+{
+    set<int> local;
+    etats.resize(1);//on ajoute la place pour l'etat initial
+    int cpt=0;
+    bool fini=false;
+
+    for(auto i:initiaux)
+    {
+        etats[0].insert(i); //l'état initial prend les valeurs des anciens états initiaux
+    }
+    initiaux.clear();
+    initiaux.push_back(0);
+
+    while(!fini)
+    {
+        //on met dans l'ensemble local le nouvel ensemble trouvé
+        for(auto e:etats[cpt])
+            for (auto tr:transition[e][0])
+                local.insert(tr);
+
+        //on cherche si l'ensemble trouvé n'est pas déja un état
+        for(int i=0;i<etats.size();i++)
+            if(etats[i]!=local)
+                etats.push_back(local);
+
+        //On regarde si on a fini
+        cpt++;
+        if(cpt<=etats.size())
+            fini=true;
+        local.clear();//on vide l'ensemble local à la fin
+    }
+
+
+}
 
 
 string affichage(int nbEtat,vector<int> initiaux,vector<int> terminaux,vector<vector<set<int>>> transition)
@@ -122,23 +157,43 @@ string affichage(int nbEtat,vector<int> initiaux,vector<int> terminaux,vector<ve
     return str;
 }
 
-
-void determinisation(vector<int> initiaux,vector<int> terminaux,vector<vector<set<int>>> transition,vector<set<int>> etats)
+string affichageAFD(int nbEtat,vector<int> initiaux,vector<int> terminaux,vector<vector<set<int>>> transition,vector<set<int>> etats)
 {
+    string str;
+    str += "nb etat: " + to_string(nbEtat) + "\n";
+    //Afichage des états initiaux
+    str += "Initiaux: ";
+    for(auto i:initiaux)
+        str += to_string(i) + " ";
+    str += "\n";
+    //Afichage des états terminaux
+    str += "Terminaux: ";
+    for(auto t:terminaux)
+        str += to_string(t) + " ";
+    str += "\n";
+
+    for(int i=0;i<etats.size();i++)
+        {
+        str += to_string(i)+"{ ";
+        for(auto e:etats[i])
+            str += to_string(e) + " ";
+        str += "}\n";
+        }
+
+    //Affichage des transitions
+    for (int i=0; i<nbEtat; i++)
+        for (int j=0; j<3; j++)
+            for (auto tr:transition[i][j])
+                str += to_string(i) + " " + to_string(j) + " " + to_string(tr) + "\n";
 
 
-
-    etats[0] = transition[initiaux[0]][0] + transition[initiaux[0]][1];
-
-
-
+    return str;
 }
-
 
 int main()
 {
-    vector<int>initiaux;
-    vector<int>terminaux;
+    vector<int> initiaux;
+    vector<int> terminaux;
 
     vector<vector<set<int>>> transition;
 
@@ -186,9 +241,9 @@ int main()
     message += "----- Automate ND Sans-E -----\n";
     message += affichage(nbEtat,initiaux,terminaux,transition);
     message += "\n";
-
+    determinisation(initiaux,terminaux,transition,etats);
     message += "----- Automate AFD -----\n";
-    message += affichage(nbEtat,initiaux,terminaux,transition);
+    message += affichageAFD(nbEtat,initiaux,terminaux,transition,etats);
     cout << message << endl;
 
 }
